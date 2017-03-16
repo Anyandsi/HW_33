@@ -1,0 +1,46 @@
+package com.company;
+
+import java.io.*;
+import java.util.Scanner;
+
+public class YAMLProgramme {
+
+    public static void main(String[] args) throws IOException {
+        File file = new File("C:\\Users\\andre\\IdeaProjects\\HW_33\\src\\com\\company\\IntArray.YAML");
+        int num = foundSingletonNum(file);
+        System.out.println(num);
+    }
+
+    public static int foundSingletonNum(File file) throws IOException {
+
+        String path = file.getPath();
+        String content = new Scanner(new File(path)).useDelimiter("\\Z").next();
+
+        String[] lines = content.split("\r\n");
+        int[] nums = new int[lines.length];
+
+        for (int i = 0, j = 0; j < lines.length && i < lines.length; i++) {
+            if(lines[i].startsWith("  -") && !lines[i].contains(":")){
+                String firstStepToGetInt = lines[i].replaceAll(" ", "");
+                String numAsString = firstStepToGetInt.replaceAll("-", "");
+                nums[j] = Integer.parseInt(numAsString);
+                j++;
+
+            }
+
+        }
+
+        int xorOfAllNums = 0;
+        int i = 0;
+        while (i < nums.length) {
+            xorOfAllNums = xorOfAllNums ^ nums[i];
+            /* Если какой-то бит в числе равен 1, то во всей последовательности он равен
+            0. Поэтому числом-одиночкой будет XOR сех чисел. Как-то так
+             */
+            i++;
+        }
+
+        return xorOfAllNums;
+    }
+
+}
